@@ -1,5 +1,12 @@
+jQuery Grayscale Plugin
+=============
+
+
+Usage
+-----
+
 Simple to use with jQuery:
 
-<code>$("img").grayscale()</code> will turn all images black and white!
+	$("img").grayscale()
 
-Tested in IE7+ and Chrome.
+Will turn all images black and white! Tested in IE7+ and Chrome.
