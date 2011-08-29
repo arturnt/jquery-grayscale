@@ -6,12 +6,12 @@
 	
 	$.fn.grayscale = function() {
 	
-		function canvasToGray(imgObj, width, height) {
+		function canvasToGray(imgObj) {
 			var canvas = document.createElement('canvas'),
 				ctx = canvas.getContext('2d');
 			
-			canvas.width = width;
-			canvas.height = height;
+			canvas.width = imgObj.width;
+			canvas.height = imgObj.height;
 			ctx.drawImage(imgObj, 0, 0);
 			
 			var imgPixels = ctx.getImageData(0, 0, canvas.width, canvas.height);
@@ -27,41 +27,25 @@
 			}
 			
 			ctx.putImageData(imgPixels, 0, 0, 0, 0, imgPixels.width, imgPixels.height);
-			return canvas.toDataURL();
+			this.src = canvas.toDataURL();
 		}
 		
-		function ieToGray(element) {
-	        $(element).css({
+		function ieToGray(imgOjb) {
+	        return $(imgOjb).css({
 	          'filter': 'progid:DXImageTransform.Microsoft.BasicImage(grayscale=1)',
 	          'zoom': '1'
 	        });
 		}
 		
 		return $(this).each(function() {
-			
-			if(!!document.createElement('canvas').getContext) {
-				
-				var $this = $(this);
-				
-				if ( ! new RegExp(window.location.hostname).test($this.attr("src")) ) {
-					$.getImageData({
-			            url: $(this).attr('src'),
-			            success: function(image) {
-			            	$this.attr("src", canvasToGray(image, image.width, image.height));
-			            }
-			        });
-					
-				} else {
-					
-					var imgObj = new Image();
-					imgObj.src = $(this).attr("src");
-					$(this).attr("src", canvasToGray(imgObj, imgObj.width, imgObj.height));
-					
-				}
-				
-			} else if ($.browser.msie) { 
+
+			if(!!document.createElement('canvas').getContext)
+				if ( ! new RegExp(window.location.hostname).test(this.src) )
+					$.getImageData({ url: this.src, success: $.proxy(canvasToGray,this) });
+				else 
+					this.src = canvasToGray(this);
+			else if ($.browser.msie) 
 				ieToGray(this);
-			}
 			
 		});
 		
