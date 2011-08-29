@@ -1,5 +1,5 @@
 Simple to use with jQuery:
 
-$("img").grayscale() will turn all images grayscale.
+<code>$("img").grayscale()</code> will turn all images black and white!
 
 Tested in IE7+ and Chrome.
